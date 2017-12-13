@@ -39,8 +39,16 @@ public class ImageManager {
 	 */
 	public static String generateName(File in) {
 		SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yy HH~mm~ss");
-		return sdf.format(in.lastModified());
+		return sdf.format(in.lastModified()) + "." + getFileExtension(in);
 	}
+	
+	public static String getFileExtension(File file) {
+        String fileName = file.getName();
+        if (fileName.lastIndexOf(".") != -1 && fileName.lastIndexOf(".") != 0) {
+        	return fileName.substring(fileName.lastIndexOf(".")+1);
+        }
+        else return "";
+    }
 	
 	/**
 	 * Renames a file.
@@ -52,14 +60,14 @@ public class ImageManager {
 		String newName = generateName(in);
 		Path originalPath = in.toPath();
 		try {
-		Files.move(originalPath, originalPath.resolveSibling(newName));
+			Files.move(originalPath, originalPath.resolveSibling(newName));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 	/**
 	 * Calls rename on a folder of files.
- * @param in the folder to rename
+     * @param in the folder to rename
 	 */
 	public static void massEdit(File in) {
 		File[] folder = in.listFiles();
